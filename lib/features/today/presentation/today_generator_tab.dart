@@ -115,11 +115,9 @@ class _TodayGeneratorTabState extends ConsumerState<TodayGeneratorTab> {
     } else {
       final selectedTemplate = _templateForDayType(
           templateRepo.getTemplates(), _selectedTemplateDayType);
-      generated = GeneratedWorkout(
-        source: SessionSource.manualTemplate,
-        exercises: selectedTemplate.orderedExerciseIds
-            .map(exerciseRepo.byId)
-            .toList(growable: false),
+      generated = service.generateFromTemplate(
+        templateExerciseIds: selectedTemplate.orderedExerciseIds,
+        history: history,
       );
     }
 
@@ -130,7 +128,10 @@ class _TodayGeneratorTabState extends ConsumerState<TodayGeneratorTab> {
         ..addEntries(
           generated.exercises.map(
             (exercise) {
-              final target = _defaultTargetFor(exercise);
+              final target = _targetForGeneratedExercise(
+                generatedWorkout: generated,
+                exercise: exercise,
+              );
               return MapEntry(
                 exercise.id,
                 SessionExerciseLog(
@@ -162,6 +163,22 @@ class _TodayGeneratorTabState extends ConsumerState<TodayGeneratorTab> {
     WorkoutDayType dayType,
   ) {
     return templates.firstWhere((template) => template.dayType == dayType);
+  }
+
+  ExercisePlanTarget _targetForGeneratedExercise({
+    required GeneratedWorkout generatedWorkout,
+    required Exercise exercise,
+  }) {
+    final generatedTarget =
+        generatedWorkout.prescriptionsByExerciseId[exercise.id];
+    if (generatedTarget != null) {
+      return ExercisePlanTarget(
+        plannedSets: generatedTarget.plannedSets,
+        plannedReps: generatedTarget.plannedReps,
+        plannedDurationSeconds: generatedTarget.plannedDurationSeconds,
+      );
+    }
+    return _defaultTargetFor(exercise);
   }
 
   Future<void> _saveSession() async {
