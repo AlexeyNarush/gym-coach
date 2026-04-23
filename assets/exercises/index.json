@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "illustrationStyle": "movement_pattern_svg",
+  "patternAssetDir": "assets/exercises/patterns/",
+  "notes": "Each exercise uses a simple SVG for its movementPattern (not exercise-specific photos). Definitions: lib/features/exercises/data/local/seed_exercise_source.dart."
+}
