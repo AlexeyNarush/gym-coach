@@ -264,7 +264,8 @@ class _TodayGeneratorTabState extends ConsumerState<TodayGeneratorTab> {
         if (_mode == GenerationMode.muscleGroup) ...[
           const SizedBox(height: 12),
           DropdownButtonFormField<MuscleGroup>(
-            value: _selectedGroup,
+            key: ValueKey(_selectedGroup),
+            initialValue: _selectedGroup,
             items: MuscleGroup.values
                 .map((group) => DropdownMenuItem(
                       value: group,
@@ -282,7 +283,8 @@ class _TodayGeneratorTabState extends ConsumerState<TodayGeneratorTab> {
         if (_mode == GenerationMode.plannedTemplate) ...[
           const SizedBox(height: 12),
           DropdownButtonFormField<WorkoutDayType>(
-            value: _selectedTemplateDayType,
+            key: ValueKey(_selectedTemplateDayType),
+            initialValue: _selectedTemplateDayType,
             items: templates
                 .map(
                   (template) => DropdownMenuItem(
