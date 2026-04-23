@@ -73,7 +73,6 @@ flutter run
 ```bash
 flutter analyze
 flutter test
-flutter test integration_test/app_flow_test.dart
 ```
 
 ## Project Structure
