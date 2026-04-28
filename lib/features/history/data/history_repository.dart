@@ -9,6 +9,11 @@ final historyRepositoryProvider = Provider<HistoryRepository>((ref) {
   return HistoryRepository(ref.watch(appDatabaseProvider.future));
 });
 
+/// Latest session logs from local storage (invalidate after append or clear).
+final sessionLogsProvider = FutureProvider<List<SessionLog>>((ref) async {
+  return ref.watch(historyRepositoryProvider).loadLogs();
+});
+
 class HistoryRepository {
   HistoryRepository(this._databaseFuture);
 
@@ -29,5 +34,10 @@ class HistoryRepository {
       _historyStorageKey,
       updated.map((entry) => entry.toJson()).toList(),
     );
+  }
+
+  Future<void> clearAll() async {
+    final database = await _databaseFuture;
+    await database.writeJsonList(_historyStorageKey, const []);
   }
 }

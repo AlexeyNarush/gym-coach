@@ -197,6 +197,7 @@ class _TodayGeneratorTabState extends ConsumerState<TodayGeneratorTab> {
           : _notesController.text.trim(),
     );
     await ref.read(historyRepositoryProvider).appendLog(log);
+    ref.invalidate(sessionLogsProvider);
     final schedule = await ref.read(scheduleRepositoryProvider).loadSchedule();
     final logs = await ref.read(historyRepositoryProvider).loadLogs();
     await ref.read(syncRepositoryProvider).pushLocalChanges(
